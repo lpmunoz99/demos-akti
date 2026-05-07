@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demos v2 — Juegos con Dificultad Real</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07070f;--s1:#0f0f1c;--s2:#17172a;--b:rgba(255,255,255,0.07);
+  --p:#6c47ff;--p2:#ff3d6e;--g:#00f5a0;--a:#ffb800;--r:#ff3d3d;--bl:#3d9eff;
+  --txt:#eeeef8;--muted:#666680;--rad:14px;
+}
+body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden;}
+.bebas{font-family:'Bebas Neue',sans-serif;}
+.mono{font-family:'DM Mono',monospace;}
+
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:60px 40px;position:relative;overflow:hidden;}
+.cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(108,71,255,.18) 0%,transparent 70%),radial-gradient(ellipse 40% 30% at 75% 75%,rgba(255,61,110,.1) 0%,transparent 60%);}
+.cover-eye{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:24px;}
+.cover h1{font-family:'Bebas Neue',sans-serif;font-size:88px;line-height:.95;margin-bottom:8px;letter-spacing:2px;}
+.cover h1 span{color:var(--p2);}
+.cover-sub{font-size:16px;color:var(--muted);max-width:500px;margin:20px auto 48px;}
+.pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.pill{background:rgba(255,255,255,.05);border:1px solid var(--b);padding:6px 16px;border-radius:100px;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;}
+.pill.hard{background:rgba(255,61,110,.1);border-color:rgba(255,61,110,.25);color:#ff7a99;}
+
+.section{padding:80px 48px;max-width:1140px;margin:0 auto;}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--b),transparent);}
+
+.game-header{margin-bottom:48px;}
+.game-num{font-family:'Bebas Neue',sans-serif;font-size:110px;line-height:1;color:rgba(255,255,255,.03);display:block;margin-bottom:-24px;}
+.badge-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:100px;}
+.badge.brand{background:rgba(108,71,255,.15);color:#a98bff;border:1px solid rgba(108,71,255,.3);}
+.badge.diff{background:rgba(255,61,110,.12);color:#ff7a99;border:1px solid rgba(255,61,110,.3);}
+.badge.ok{background:rgba(0,245,160,.1);color:#00f5a0;border:1px solid rgba(0,245,160,.25);}
+.game-header h2{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:1px;line-height:1;margin-bottom:10px;}
+.game-header p{color:var(--muted);max-width:500px;font-size:15px;}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.tag{background:rgba(255,255,255,.04);border:1px solid var(--b);font-size:11px;padding:3px 10px;border-radius:6px;color:var(--muted);font-family:'DM Mono',monospace;}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;}
+.game-frame{background:var(--s1);border:1px solid var(--b);border-radius:var(--rad);overflow:hidden;}
+.game-viewport{aspect-ratio:9/16;max-height:540px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#060612;}
+
+.cards{display:flex;flex-direction:column;gap:16px;}
+.card{background:var(--s1);border:1px solid var(--b);border-radius:12px;padding:20px;}
+.card h4{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.card p{font-size:14px;color:var(--txt);line-height:1.6;}
+.card ul{list-style:none;}
+.card ul li{font-size:13px;color:var(--txt);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:flex-start;gap:8px;}
+.card ul li::before{content:'›';color:var(--p2);font-size:16px;line-height:1;flex-shrink:0;}
+.diff-block{background:rgba(255,61,110,.07);border:1px solid rgba(255,61,110,.2);border-radius:10px;padding:16px;}
+.diff-block h4{color:#ff7a99!important;}
+
+.footer{text-align:center;padding:60px 40px;border-top:1px solid var(--b);color:var(--muted);font-size:14px;}
+.footer strong{color:var(--txt);}
+
+/* ---- SHARED GAME UI ---- */
+.overlay{position:absolute;inset:0;background:rgba(7,7,15,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:20;text-align:center;padding:24px;}
+.overlay h3{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;}
+.overlay p{color:var(--muted);font-size:13px;max-width:240px;line-height:1.5;}
+.play-btn{background:linear-gradient(135deg,var(--p),var(--p2));border:none;border-radius:10px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;padding:12px 36px;cursor:pointer;transition:transform .1s;}
+.play-btn:hover{transform:scale(1.04);}
+.credits-bar{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 12px;font-family:'DM Mono',monospace;font-size:12px;color:var(--a);z-index:15;}
+
+/* ---- GAME 1: TRAZO ---- */
+#traceCanvas{position:absolute;inset:0;cursor:crosshair;touch-action:none;}
+.trace-bg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:linear-gradient(160deg,#0a0520,#1a0a30);}
+.trace-hud{position:absolute;top:12px;left:0;right:0;display:flex;justify-content:space-between;padding:0 14px;z-index:10;pointer-events:none;}
+.trace-timer{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;}
+.trace-acc{font-family:'DM Mono',monospace;font-size:13px;color:var(--g);text-align:right;}
+.trace-timer-bar{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--g),var(--a));transition:width .1s linear;}
+.trace-msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:12;}
+.trace-msg span{font-family:'Bebas Neue',sans-serif;font-size:44px;padding:10px 28px;border-radius:10px;opacity:0;transition:opacity .2s;}
+
+/* ---- GAME 2: NINJA ---- */
+#ninjaCanvas{position:absolute;inset:0;}
+.ninja-hud{position:absolute;top:12px;left:0;right:0;padding:0 14px;display:flex;justify-content:space-between;align-items:center;z-index:5;pointer-events:none;}
+.ninja-score{font-family:'Bebas Neue',sans-serif;font-size:38px;color:#fff;}
+.ninja-lives{display:flex;gap:4px;font-size:18px;}
+.ninja-timer{font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);}
+.ninja-target{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--a);pointer-events:none;z-index:5;white-space:nowrap;}
+.combo-pop{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--a);pointer-events:none;z-index:5;opacity:0;transition:opacity .2s;text-shadow:0 0 12px rgba(255,184,0,.6);}
+.combo-pop.show{opacity:1;}
+
+/* ---- GAME 3: ZOOM ---- */
+.zoom-wrap{position:absolute;inset:0;display:flex;flex-direction:column;background:#0a0a1a;}
+.zoom-img-area{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.zoom-emoji{font-size:100px;will-change:transform;transition:transform .3s cubic-bezier(.25,.46,.45,.94);user-select:none;}
+.zoom-blur{position:absolute;inset:0;pointer-events:none;transition:backdrop-filter .3s;}
+.zoom-hud{padding:10px 14px;background:rgba(10,10,26,.9);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--b);}
+.zoom-pts{font-family:'Bebas Neue',sans-serif;font-size:28px;}
+.zoom-rnd{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);}
+.zoom-tbar{height:3px;background:rgba(255,255,255,.08);}
+.zoom-tfill{height:100%;background:linear-gradient(90deg,var(--p),var(--p2));transition:width .08s linear;}
+.zoom-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px;}
+.zoom-opt{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:#fff;cursor:pointer;text-align:center;transition:all .15s;}
+.zoom-opt:hover:not(:disabled){background:rgba(108,71,255,.2);border-color:rgba(108,71,255,.4);}
+.zoom-opt.correct{background:rgba(0,245,160,.15);border-color:rgba(0,245,160,.5);color:var(--g);}
+.zoom-opt.wrong{background:rgba(255,61,110,.08);border-color:rgba(255,61,110,.2);color:rgba(255,255,255,.25);}
+.zoom-opt:disabled{cursor:default;}
+.zoom-fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:8;opacity:0;transition:opacity .2s;}
+.zoom-fb.show{opacity:1;}
+.zoom-fb-pill{font-family:'Bebas Neue',sans-serif;font-size:40px;padding:12px 28px;border-radius:10px;}
+.zoom-streak{position:absolute;top:8px;right:14px;font-family:'DM Mono',monospace;font-size:11px;color:var(--a);z-index:6;pointer-events:none;}
+
+/* ---- GAME 4: RULETA ---- */
+.ruleta-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;background:linear-gradient(180deg,#0a0a1a,#1a0820);}
+.ruleta-ptr{width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid #fff;filter:drop-shadow(0 3px 6px rgba(0,0,0,.6));margin-bottom:-6px;z-index:2;}
+.spin-btn{background:linear-gradient(135deg,var(--p),var(--p2));border:none;border-radius:10px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;padding:13px 44px;cursor:pointer;transition:transform .1s,opacity .2s;}
+.spin-btn:hover:not(:disabled){transform:scale(1.05);}
+.spin-btn:disabled{opacity:.4;cursor:not-allowed;}
+.ruleta-result{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:#fff;text-align:center;min-height:28px;text-shadow:0 0 20px rgba(108,71,255,.5);}
+.ruleta-odds{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;line-height:1.8;}
+
+/* ---- GAME 5: BURBUJAS ---- */
+#bubbleCanvas{position:absolute;inset:0;}
+.bubble-hud{position:absolute;top:12px;left:0;right:0;padding:0 14px;display:flex;justify-content:space-between;align-items:center;z-index:5;pointer-events:none;}
+.bubble-score{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;}
+.bubble-timer{font-family:'DM Mono',monospace;font-size:14px;color:var(--muted);}
+.bubble-goal{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 14px;font-family:'DM Mono',monospace;font-size:11px;color:var(--a);z-index:5;pointer-events:none;white-space:nowrap;}
+
+@media(max-width:768px){.grid2{grid-template-columns:1fr;}.cover h1{font-size:56px;}.section{padding:60px 24px;}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-eye">Propuesta v2 · Dificultad Calibrada</div>
+  <h1>JUEGOS<br><span>DIFÍCILES</span><br>DE GANAR</h1>
+  <p class="cover-sub">Mecánicas rediseñadas para que 1 de cada 5–10 jugadores gane. Precisión, velocidad y memoria combinadas. Premios reales justificados.</p>
+  <div class="pills">
+    <span class="pill">Pantalla 175×65 cm</span>
+    <span class="pill">Táctil 10 puntos</span>
+    <span class="pill hard">⚡ Dificultad alta</span>
+    <span class="pill hard">🎯 1 de cada 5–10 gana</span>
+    <span class="pill">3 créditos por persona</span>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ========== JUEGO 1: TRAZO DE PRECISIÓN ========== -->
+<section class="section">
+  <div class="game-header">
+    <span class="game-num">01</span>
+    <div class="badge-row">
+      <span class="badge brand">Brandeabilidad 10/10</span>
+      <span class="badge diff">Dificultad: Precisión + Velocidad</span>
+    </div>
+    <h2>Trazo de Precisión</h2>
+    <p>El usuario debe seguir el contorno del logo con el dedo en 20 segundos. Si se desvía más de 18px del trazo, falla inmediatamente. No hay margen para el error.</p>
+    <div class="tags">
+      <span class="tag">1 jugador</span><span class="tag">20 seg</span>
+      <span class="tag">pulso firme requerido</span><span class="tag">fácil de brandear</span>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="game-frame">
+      <div class="game-viewport" id="traceVP">
+        <div class="trace-bg">
+          <svg width="100%" height="100%" id="traceSVGBg" style="position:absolute;inset:0;"></svg>
+        </div>
+        <canvas id="traceCanvas"></canvas>
+        <div class="trace-hud">
+          <div class="trace-timer" id="traceTimer">20</div>
+          <div class="trace-acc" id="traceAcc">Precisión: —</div>
+        </div>
+        <div id="traceTimerBar" class="trace-timer-bar" style="width:100%;position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#00f5a0,#ffb800);z-index:10;"></div>
+        <div class="trace-msg" id="traceMsg"></div>
+        <div class="overlay" id="traceOverlay">
+          <div style="font-size:52px">✍️</div>
+          <h3>Trazo de Precisión</h3>
+          <p>Sigue el contorno del logo con el dedo. Si te desvías más de 18px del trazo, pierdes al instante. Tienes 20 segundos.</p>
+          <button class="play-btn" onclick="startTrace()">JUGAR</button>
+        </div>
+        <div class="credits-bar" id="traceCredits">❤️❤️❤️ 3 intentos</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card diff-block">
+        <h4>¿Por qué es difícil?</h4>
+        <ul>
+          <li>Margen de error: solo 18px (menos de un dedo de ancho)</li>
+          <li>Falla instantánea al desviarse — sin segundas oportunidades</li>
+          <li>El temblor natural de la mano causa errores</li>
+          <li>20 segundos que generan presión visible para el crowd</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Para ganar</h4>
+        <p>Completar el trazo completo sin salirse del camino. El juego calcula el porcentaje de precisión en tiempo real. Solo se otorga premio con 90%+ de precisión al terminar.</p>
+      </div>
+      <div class="card">
+        <h4>Assets de marca</h4>
+        <ul>
+          <li>Logo vectorizado (el contorno es el trazo)</li>
+          <li>Colores corporativos para el camino guía</li>
+          <li>Mensaje de premio al ganar</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ========== JUEGO 2: CORTA EL PRODUCTO ========== -->
+<section class="section">
+  <div class="game-header">
+    <span class="game-num">02</span>
+    <div class="badge-row">
+      <span class="badge brand">Brandeabilidad 9/10</span>
+      <span class="badge diff">Dificultad: Velocidad + Precisión</span>
+    </div>
+    <h2>Corta el Producto</h2>
+    <p>Productos de la marca vuelan a velocidad creciente. Trayectorias curvas e impredecibles. Bombas que eliminan una vida al instante. Solo 2 vidas. Score mínimo requerido para ganar.</p>
+    <div class="tags">
+      <span class="tag">1 jugador</span><span class="tag">60 seg</span>
+      <span class="tag">2 vidas</span><span class="tag">score mínimo: 300 pts</span>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="game-frame">
+      <div class="game-viewport" id="ninjaVP" style="background:#080818;">
+        <canvas id="ninjaCanvas"></canvas>
+        <div class="ninja-hud">
+          <div class="ninja-score" id="ninjaScore">0</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+            <div class="ninja-lives" id="ninjaLives">❤️❤️</div>
+            <div class="ninja-timer" id="ninjaTimer">60s</div>
+          </div>
+        </div>
+        <div class="combo-pop" id="ninjaCombo">COMBO!</div>
+        <div class="ninja-target" id="ninjaTarget">Meta: 300 pts para ganar</div>
+        <div class="overlay" id="ninjaOverlay">
+          <div style="font-size:52px">⚔️</div>
+          <h3>Corta el Producto</h3>
+          <p>Corta los productos con swipe. Las 💣 BOMBAS te quitan una vida al instante. Solo tienes 2 vidas. Necesitas 300 pts para ganar.</p>
+          <button class="play-btn" onclick="startNinja()">JUGAR</button>
+        </div>
+        <div class="credits-bar" id="ninjaCredits">❤️❤️❤️ 3 intentos</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card diff-block">
+        <h4>¿Por qué es difícil?</h4>
+        <ul>
+          <li>Bombas 💣 mezcladas entre productos — cortar una = vida perdida</li>
+          <li>Solo 2 vidas totales en toda la partida</li>
+          <li>Velocidad escala cada 10 segundos — al final es casi imposible</li>
+          <li>Trayectorias curvas e impredecibles (no parabólicas simples)</li>
+          <li>Score mínimo de 300 pts — no basta con sobrevivir</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Sistema de puntos</h4>
+        <ul>
+          <li>Corte normal: +10 pts</li>
+          <li>Combo x2: +20 pts por objeto</li>
+          <li>Combo x3+: +30 pts por objeto</li>
+          <li>Bomba cortada: -1 vida inmediata</li>
+          <li>Producto caído sin cortar: -1 vida</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Assets de marca</h4>
+        <ul>
+          <li>4–8 PNGs de productos sin fondo</li>
+          <li>Partículas en colores corporativos</li>
+          <li>Pantalla de resultado con CTA</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ========== JUEGO 3: ZOOM INFINITO ========== -->
+<section class="section">
+  <div class="game-header">
+    <span class="game-num">03</span>
+    <div class="badge-row">
+      <span class="badge brand">Brandeabilidad 8/10</span>
+      <span class="badge diff">Dificultad: Velocidad + Memoria</span>
+    </div>
+    <h2>Zoom Infinito</h2>
+    <p>5 segundos por ronda. Opciones trampa casi idénticas. Necesitas acertar 3 de 3 para ganar. El zoom nunca revela del todo — tienes que adivinar antes de ver la imagen completa.</p>
+    <div class="tags">
+      <span class="tag">1 jugador</span><span class="tag">5 seg por ronda</span>
+      <span class="tag">3/3 correctas para ganar</span><span class="tag">sin margen de error</span>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="game-frame">
+      <div class="game-viewport" id="zoomVP">
+        <div class="zoom-wrap" id="zoomWrap">
+          <div class="zoom-hud">
+            <div>
+              <div class="zoom-rnd" id="zoomRnd">Ronda 1 / 3 · 3 correctas para ganar</div>
+            </div>
+            <div class="zoom-pts" id="zoomPts">0 pts</div>
+          </div>
+          <div class="zoom-tbar"><div class="zoom-tfill" id="zoomTfill" style="width:100%"></div></div>
+          <div class="zoom-img-area">
+            <div class="zoom-emoji" id="zoomEmoji">☕</div>
+            <div class="zoom-blur" id="zoomBlur"></div>
+            <div class="zoom-streak" id="zoomStreak"></div>
+          </div>
+          <div class="zoom-opts" id="zoomOpts"></div>
+          <div class="zoom-fb" id="zoomFb"><div class="zoom-fb-pill" id="zoomFbPill"></div></div>
+        </div>
+        <div class="overlay" id="zoomOverlay">
+          <div style="font-size:52px">🔍</div>
+          <h3>Zoom Infinito</h3>
+          <p>5 segundos por ronda. Debes acertar las 3 rondas seguidas. Un fallo = game over. Las opciones son muy similares, ¡cuidado!</p>
+          <button class="play-btn" onclick="startZoom()">JUGAR</button>
+        </div>
+        <div class="credits-bar" id="zoomCredits">❤️❤️❤️ 3 intentos</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card diff-block">
+        <h4>¿Por qué es difícil?</h4>
+        <ul>
+          <li>Solo 5 segundos — el tiempo se acaba antes de que la imagen sea clara</li>
+          <li>Un solo fallo = game over (hay que acertar 3/3)</li>
+          <li>Opciones trampa con nombres y emojis muy similares</li>
+          <li>El zoom nunca llega al 100% — siempre hay duda</li>
+          <li>La presión del tiempo genera errores de precipitación</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Sistema de puntos</h4>
+        <ul>
+          <li>Respuesta en primeros 2 seg: 1000 pts</li>
+          <li>Respuesta 2–4 seg: 500 pts</li>
+          <li>Respuesta en últim segundo: 100 pts</li>
+          <li>Fallo en cualquier ronda: game over</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Assets de marca</h4>
+        <ul>
+          <li>Fotos HD de productos del catálogo</li>
+          <li>Nombres oficiales de cada producto</li>
+          <li>Info del producto al revelar (precio, beneficio)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ========== JUEGO 4: RULETA ========== -->
+<section class="section">
+  <div class="game-header">
+    <span class="game-num">04</span>
+    <div class="badge-row">
+      <span class="badge brand">Brandeabilidad 9/10</span>
+      <span class="badge diff">Dificultad: Probabilidad ponderada</span>
+    </div>
+    <h2>Ruleta de Premios</h2>
+    <p>Mecánica pura de suerte, pero con probabilidades controladas. El premio mayor tiene solo 3% de probabilidad real aunque visualmente la sección parezca igual que las demás.</p>
+    <div class="tags">
+      <span class="tag">1 jugador</span><span class="tag">10 seg</span>
+      <span class="tag">premio mayor: 3% prob.</span><span class="tag">alto impacto visual</span>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="game-frame">
+      <div class="game-viewport" id="ruletaVP">
+        <div class="ruleta-wrap">
+          <div class="ruleta-ptr"></div>
+          <canvas id="ruletaCanvas" width="280" height="280"></canvas>
+          <div class="ruleta-result" id="ruletaResult">Toca GIRAR para probar suerte</div>
+          <button class="spin-btn" id="spinBtn" onclick="spinRuleta()">GIRAR</button>
+          <div class="ruleta-odds">
+            Premio Mayor (Producto Gratis) · 3% · &nbsp;|&nbsp; 50% OFF · 7% · &nbsp;|&nbsp; 20% OFF · 15%<br>
+            10% OFF · 25% · &nbsp;|&nbsp; 5% OFF · 30% · &nbsp;|&nbsp; Envío Gratis · 20%
+          </div>
+        </div>
+        <div class="credits-bar" id="ruletaCredits">❤️❤️❤️ 3 intentos</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card diff-block">
+        <h4>Control de probabilidades</h4>
+        <ul>
+          <li>🏆 Producto Gratis: 3% — casi imposible</li>
+          <li>🥈 50% de descuento: 7%</li>
+          <li>🥉 20% de descuento: 15%</li>
+          <li>Envío gratis: 20%</li>
+          <li>10% descuento: 25%</li>
+          <li>5% descuento: 30%</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>¿Cómo funciona el control?</h4>
+        <p>Las secciones visuales de la ruleta son del mismo tamaño para todos — el usuario percibe probabilidades iguales. El resultado real se determina por tabla de pesos antes de animar, la rueda simplemente "aterriza" en la sección ganadora.</p>
+      </div>
+      <div class="card">
+        <h4>Personalización</h4>
+        <ul>
+          <li>Probabilidades configurables por JSON</li>
+          <li>Centro de la ruleta con logo de marca</li>
+          <li>Colores de secciones = paleta corporativa</li>
+          <li>Premio con código QR al ganar</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ========== JUEGO 5: ESQUIVA Y RECOGE ========== -->
+<section class="section">
+  <div class="game-header">
+    <span class="game-num">05</span>
+    <div class="badge-row">
+      <span class="badge brand">Brandeabilidad 9/10</span>
+      <span class="badge diff">Dificultad: Reflejos + Precisión</span>
+    </div>
+    <h2>Esquiva y Recoge</h2>
+    <p>El usuario controla una canasta deslizando el dedo. Productos de la marca caen desde arriba — hay que recogerlos. Obstáculos y productos falsos también caen — si los tocas pierdes una vida.</p>
+    <div class="tags">
+      <span class="tag">1 jugador</span><span class="tag">60 seg</span>
+      <span class="tag">reflejos rápidos</span><span class="tag">velocidad creciente</span>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="game-frame">
+      <div class="game-viewport" id="esquivaVP" style="background:#06080f;">
+        <canvas id="esquivaCanvas"></canvas>
+        <div class="ninja-hud">
+          <div class="ninja-score" id="esquivaScore">0</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+            <div class="ninja-lives" id="esquivaLives">❤️❤️❤️</div>
+            <div class="ninja-timer" id="esquivaTimer">60s</div>
+          </div>
+        </div>
+        <div class="ninja-target" id="esquivaMeta">Meta: 500 pts para ganar</div>
+        <div class="overlay" id="esquivaOverlay">
+          <div style="font-size:52px;">🧺</div>
+          <h3>Esquiva y Recoge</h3>
+          <p>Desliza para mover la canasta. Recoge los productos ✅ y esquiva las bombas 💣 y los productos falsos ❌. Necesitas 400 pts.</p>
+          <button class="play-btn" onclick="startEsquiva()">JUGAR</button>
+        </div>
+        <div class="credits-bar" id="esquivaCredits">❤️❤️❤️ 3 intentos</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card diff-block">
+        <h4>¿Por qué es difícil?</h4>
+        <ul>
+          <li>Velocidad de caída aumenta cada 10 segundos</li>
+          <li>Bombas y productos falsos mezclados entre los reales</li>
+          <li>Solo 3 vidas — errores consecutivos son letales</li>
+          <li>Meta de 400 pts requiere alta concentración sostenida</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Sistema de puntos</h4>
+        <ul>
+          <li>Producto correcto recogido: +30 pts</li>
+          <li>Bomba o falso recogido: -1 vida</li>
+          <li>Combo de 5 seguidos: +50 pts bonus</li>
+          <li>Sin errores en 10 seg: +20 pts bonus</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Assets de marca</h4>
+        <ul>
+          <li>4–6 PNGs de productos reales sin fondo</li>
+          <li>Colores de canasta = paleta corporativa</li>
+          <li>Obstáculos temáticos de la campaña</li>
+          <li>Pantalla de resultado con CTA de marca</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<script>
+// ============================================================
+// CRÉDITOS GLOBALES
+// ============================================================
+const globalCredits = {trace:3, ninja:3, zoom:3, ruleta:3, esquiva:3};
+function useCredit(game) {
+  if(globalCredits[game]<=0) return false;
+  globalCredits[game]--;
+  const el=document.getElementById(game+'Credits');
+  if(el) el.textContent='❤️'.repeat(globalCredits[game])+'🖤'.repeat(3-globalCredits[game])+' intentos';
+  return true;
+}
+
+// ============================================================
+// JUEGO 1 — TRAZO DE PRECISIÓN
+// ============================================================
+(function(){
+  const vp=document.getElementById('traceVP');
+  const canvas=document.getElementById('traceCanvas');
+  const overlay=document.getElementById('traceOverlay');
+  const timerEl=document.getElementById('traceTimer');
+  const accEl=document.getElementById('traceAcc');
+  const timerBar=document.getElementById('traceTimerBar');
+  const msgEl=document.getElementById('traceMsg');
+  let ctx,W,H,path=[],running=false,timeLeft=20,timerInt=null,drawing=false;
+  let totalPoints=0,goodPoints=0;
+  const TOLERANCE=18;
+
+  // Star shape path points (normalized 0-1)
+  function buildPath(w,h){
+    const cx=w/2,cy=h/2,R=Math.min(w,h)*0.32,r=R*0.45;
+    const pts=[];
+    for(let i=0;i<10;i++){
+      const ang=-Math.PI/2+(i*Math.PI*2/10);
+      const radius=i%2===0?R:r;
+      pts.push({x:cx+Math.cos(ang)*radius, y:cy+Math.sin(ang)*radius});
+    }
+    return pts;
+  }
+
+  function distToPath(x,y){
+    let minD=Infinity;
+    for(let i=0;i<path.length;i++){
+      const a=path[i], b=path[(i+1)%path.length];
+      const dx=b.x-a.x, dy=b.y-a.y;
+      const t=Math.max(0,Math.min(1,((x-a.x)*dx+(y-a.y)*dy)/(dx*dx+dy*dy)));
+      const px=a.x+t*dx, py=a.y+t*dy;
+      minD=Math.min(minD,Math.hypot(x-px,y-py));
+    }
+    return minD;
+  }
+
+  function resize(){
+    const r=vp.getBoundingClientRect();
+    W=canvas.width=r.width; H=canvas.height=r.height;
+    path=buildPath(W,H);
+    drawGuidePath();
+  }
+
+  function drawGuidePath(){
+    const svg=document.getElementById('traceSVGBg');
+    if(!path.length) return;
+    const pts=path.map(p=>`${p.x},${p.y}`).join(' ');
+    svg.innerHTML=`<polygon points="${pts}" fill="none" stroke="rgba(108,71,255,0.25)" stroke-width="36" stroke-linejoin="round"/>
+    <polygon points="${pts}" fill="none" stroke="rgba(108,71,255,0.6)" stroke-width="2" stroke-dasharray="6 4" stroke-linejoin="round"/>
+    <text x="${W/2}" y="${H*0.12}" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="DM Mono,monospace" font-size="13">Sigue el contorno</text>`;
+  }
+
+  function flashMsg(text,color,bg){
+    msgEl.innerHTML=`<span style="background:${bg};color:${color}">${text}</span>`;
+    msgEl.querySelector('span').style.opacity='1';
+    setTimeout(()=>{const s=msgEl.querySelector('span');if(s)s.style.opacity='0';},700);
+  }
+
+  function endGame(win){
+    running=false; drawing=false;
+    clearInterval(timerInt);
+    const pct=totalPoints>0?Math.round(goodPoints/totalPoints*100):0;
+    const msg=win
+      ? `<div style="font-size:44px">🎉</div><h3>¡GANASTE!</h3><p style="color:var(--g)">Precisión: ${pct}% · Premio desbloqueado</p><div style="font-family:DM Mono,monospace;background:rgba(0,245,160,.1);border:1px solid rgba(0,245,160,.3);border-radius:8px;padding:10px 20px;font-size:18px;color:var(--g);letter-spacing:3px;margin-top:4px">PREMIO2024</div>`
+      : `<div style="font-size:44px">💔</div><h3>FALLASTE</h3><p>Precisión: ${pct}% — necesitas 90%+<br>Te desviaste demasiado del trazo</p>`;
+    overlay.innerHTML=msg+(globalCredits.trace>0?`<button class="play-btn" onclick="startTrace()">REINTENTAR (${globalCredits.trace})</button>`:`<p style="color:var(--muted);font-size:12px">Sin intentos restantes</p>`);
+    overlay.style.display='flex';
+  }
+
+  window.startTrace=function(){
+    if(!useCredit('trace')) return;
+    resize();
+    ctx=canvas.getContext('2d');
+    ctx.clearRect(0,0,W,H);
+    timeLeft=20; totalPoints=0; goodPoints=0; running=true; drawing=false;
+    timerEl.textContent='20'; accEl.textContent='Precisión: —';
+    timerBar.style.width='100%';
+    overlay.style.display='none';
+    clearInterval(timerInt);
+    timerInt=setInterval(()=>{
+      timeLeft-=0.1;
+      timerBar.style.width=(timeLeft/20*100)+'%';
+      timerEl.textContent=Math.ceil(timeLeft);
+      if(timeLeft<=0){ endGame(totalPoints>50 && goodPoints/totalPoints>=0.90); }
+    },100);
+  };
+
+  function draw(x,y){
+    if(!running||!drawing) return;
+    const d=distToPath(x,y);
+    totalPoints++;
+    if(d<=TOLERANCE){ goodPoints++; }
+    else {
+      running=false; clearInterval(timerInt);
+      flashMsg('¡FALLASTE!','#ff3d6e','rgba(255,61,110,.2)');
+      ctx.strokeStyle='rgba(255,61,110,0.8)'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.arc(x,y,20,0,Math.PI*2); ctx.stroke();
+      setTimeout(()=>endGame(false),800);
+      return;
+    }
+    const pct=Math.round(goodPoints/totalPoints*100);
+    accEl.textContent='Precisión: '+pct+'%';
+    ctx.strokeStyle=`hsl(${140+d*3},80%,55%)`;
+    ctx.lineWidth=4; ctx.lineCap='round';
+    ctx.beginPath(); ctx.arc(x,y,2,0,Math.PI*2); ctx.fillStyle=ctx.strokeStyle; ctx.fill();
+  }
+
+  function getPos(e){ const r=canvas.getBoundingClientRect(); const s=e.touches?e.touches[0]:e; return{x:s.clientX-r.left,y:s.clientY-r.top}; }
+  canvas.addEventListener('mousedown',e=>{drawing=true; const p=getPos(e); draw(p.x,p.y);});
+  canvas.addEventListener('mousemove',e=>{ const p=getPos(e); draw(p.x,p.y);});
+  canvas.addEventListener('mouseup',()=>{if(running&&drawing){ drawing=false; endGame(totalPoints>30&&goodPoints/totalPoints>=0.90);}});
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;const p=getPos(e);draw(p.x,p.y);},{passive:false});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();const p=getPos(e);draw(p.x,p.y);},{passive:false});
+  canvas.addEventListener('touchend',()=>{if(running&&drawing){drawing=false;endGame(totalPoints>30&&goodPoints/totalPoints>=0.90);}});
+  setTimeout(resize,100);
+})();
+
+// ============================================================
+// JUEGO 2 — NINJA
+// ============================================================
+(function(){
+  const canvas=document.getElementById('ninjaCanvas');
+  const overlay=document.getElementById('ninjaOverlay');
+  const scoreEl=document.getElementById('ninjaScore');
+  const livesEl=document.getElementById('ninjaLives');
+  const timerEl=document.getElementById('ninjaTimer');
+  const comboEl=document.getElementById('ninjaCombo');
+  const targetEl=document.getElementById('ninjaTarget');
+  let ctx,W,H,items=[],particles=[],score=0,lives=2,timeLeft=60,running=false;
+  let trail=[],lastPos=null,combo=0,comboTimer=null,spawnInt=null,gameTimer=null,raf=null;
+  const PRODUCTS=['🍎','🥤','🧃','🍫','🎯','⚽'];
+  const WIN_SCORE=300;
+
+  function resize(){ const r=canvas.parentElement.getBoundingClientRect(); W=canvas.width=r.width; H=canvas.height=r.height; }
+
+  function spawn(){
+    const isBomb=Math.random()<0.22;
+    const x=60+Math.random()*(W-120);
+    const speed=6+Math.min((60-timeLeft)/12,4);
+    items.push({
+      x,y:H+10,
+      vx:(Math.random()-.5)*(2+speed*.25),
+      vy:-(speed+Math.random()*4),
+      curve:(Math.random()-.5)*.06,
+      emoji:isBomb?'💣':PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)],
+      bomb:isBomb, cut:false, alpha:1, size:42
+    });
+  }
+
+  function addParts(x,y,color){
+    for(let i=0;i<14;i++){
+      const a=Math.random()*Math.PI*2,s=2+Math.random()*6;
+      particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,r:2+Math.random()*4,alpha:1,color});
+    }
+  }
+
+  function checkSlice(x1,y1,x2,y2){
+    items.forEach(it=>{
+      if(it.cut) return;
+      const dx=x2-x1,dy=y2-y1,fx=it.x-x1,fy=it.y-y1;
+      const t=Math.max(0,Math.min(1,(fx*dx+fy*dy)/(dx*dx+dy*dy||1)));
+      if(Math.hypot(it.x-(x1+t*dx),it.y-(y1+t*dy))<it.size*.6){
+        it.cut=true;
+        if(it.bomb){
+          lives=Math.max(0,lives-1);
+          livesEl.textContent='❤️'.repeat(lives)+'🖤'.repeat(2-lives);
+          addParts(it.x,it.y,'#ff3d3d');
+          if(lives<=0){ endNinja(false); return; }
+        } else {
+          combo++;
+          const mult=combo>=3?3:combo>=2?2:1;
+          score+=10*mult; scoreEl.textContent=score;
+          addParts(it.x,it.y,['#6c47ff','#ff3d6e','#00f5a0','#ffb800'][Math.floor(Math.random()*4)]);
+          if(combo>=2){ comboEl.textContent='COMBO x'+mult+'!'; comboEl.classList.add('show'); clearTimeout(comboTimer); comboTimer=setTimeout(()=>{comboEl.classList.remove('show');combo=0;},1000); }
+        }
+      }
+    });
+  }
+
+  function endNinja(win){
+    running=false;
+    clearInterval(spawnInt); clearInterval(gameTimer); cancelAnimationFrame(raf);
+    const msg=win
+      ? `<div style="font-size:44px">🏆</div><h3>¡GANASTE!</h3><p style="color:var(--g)">Score: ${score} pts — Premio desbloqueado</p><div style="font-family:DM Mono,monospace;background:rgba(0,245,160,.1);border:1px solid rgba(0,245,160,.3);border-radius:8px;padding:10px 20px;font-size:18px;color:var(--g);letter-spacing:3px;margin-top:4px">NINJA2024</div>`
+      : `<div style="font-size:44px">${lives<=0?'💣':'⏰'}</div><h3>GAME OVER</h3><p>${lives<=0?'Cortaste una bomba':'Score: '+score+' pts — necesitas '+WIN_SCORE}</p>`;
+    overlay.innerHTML=msg+(globalCredits.ninja>0?`<button class="play-btn" onclick="startNinja()">REINTENTAR (${globalCredits.ninja})</button>`:`<p style="color:var(--muted);font-size:12px">Sin intentos restantes</p>`);
+    overlay.style.display='flex';
+  }
+
+  function loop(){
+    if(!running) return;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#080818'; ctx.fillRect(0,0,W,H);
+    if(trail.length>1){
+      ctx.strokeStyle='rgba(255,255,255,.45)'; ctx.lineWidth=3; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(trail[0].x,trail[0].y);
+      for(let i=1;i<trail.length;i++) ctx.lineTo(trail[i].x,trail[i].y);
+      ctx.stroke();
+    }
+    items.forEach(it=>{
+      if(!it.cut){ it.x+=it.vx; it.vx+=it.curve; it.y+=it.vy; it.vy+=0.12; }
+      else{ it.y+=4; it.alpha-=0.05; }
+      ctx.globalAlpha=it.alpha;
+      ctx.font=it.size+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(it.emoji,it.x,it.y);
+      ctx.globalAlpha=1;
+    });
+    const missed=items.filter(it=>!it.cut&&it.y>H+60);
+    if(missed.length){ lives=Math.max(0,lives-missed.length); livesEl.textContent='❤️'.repeat(lives)+'🖤'.repeat(2-lives); if(lives<=0){endNinja(false);return;} }
+    items=items.filter(it=>it.y<H+120&&it.alpha>0);
+    particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.12;p.alpha-=.04;});
+    particles=particles.filter(p=>p.alpha>0);
+    particles.forEach(p=>{ ctx.globalAlpha=p.alpha; ctx.fillStyle=p.color; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; });
+    raf=requestAnimationFrame(loop);
+  }
+
+  window.startNinja=function(){
+    if(!useCredit('ninja')) return;
+    resize(); ctx=canvas.getContext('2d');
+    items=[]; particles=[]; score=0; lives=2; timeLeft=60; running=true; trail=[]; lastPos=null; combo=0;
+    scoreEl.textContent='0'; livesEl.textContent='❤️❤️'; timerEl.textContent='60s';
+    targetEl.textContent='Meta: '+WIN_SCORE+' pts para ganar';
+    overlay.style.display='none';
+    clearInterval(spawnInt); clearInterval(gameTimer);
+    let spawnDelay=900;
+    spawnInt=setInterval(()=>{ if(!running) return; spawn(); if(spawnDelay>500) spawnDelay-=5; },spawnDelay);
+    gameTimer=setInterval(()=>{ if(!running) return; timeLeft--; timerEl.textContent=timeLeft+'s'; if(timeLeft<=0) endNinja(score>=WIN_SCORE); },1000);
+    raf=requestAnimationFrame(loop);
+  };
+
+  function addTrail(x,y){ trail.push({x,y}); if(trail.length>10) trail.shift(); if(lastPos) checkSlice(lastPos.x,lastPos.y,x,y); lastPos={x,y}; }
+  function getPos(e){ const r=canvas.getBoundingClientRect(); const s=e.touches?e.touches[0]:e; return{x:s.clientX-r.left,y:s.clientY-r.top}; }
+  canvas.addEventListener('mousemove',e=>{if(!running)return;const p=getPos(e);addTrail(p.x,p.y);});
+  canvas.addEventListener('mouseout',()=>{trail=[];lastPos=null;});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!running)return;const p=getPos(e);addTrail(p.x,p.y);},{passive:false});
+  canvas.addEventListener('touchend',()=>{trail=[];lastPos=null;});
+  setTimeout(resize,100);
+})();
+
+// ============================================================
+// JUEGO 3 — ZOOM INFINITO
+// ============================================================
+(function(){
+  const overlay=document.getElementById('zoomOverlay');
+  const emojiEl=document.getElementById('zoomEmoji');
+  const blurEl=document.getElementById('zoomBlur');
+  const optsEl=document.getElementById('zoomOpts');
+  const ptsEl=document.getElementById('zoomPts');
+  const rndEl=document.getElementById('zoomRnd');
+  const tfill=document.getElementById('zoomTfill');
+  const fb=document.getElementById('zoomFb');
+  const fbPill=document.getElementById('zoomFbPill');
+  const streakEl=document.getElementById('zoomStreak');
+
+  const rounds=[
+    {e:'☕',correct:0,opts:['☕ Café Clásico','🫖 Té Chai','🥛 Latte Vainilla','🧋 Matcha Latte']},
+    {e:'🍕',correct:2,opts:['🥪 Sándwich Club','🫔 Wrap Pollo','🍕 Pizza Mozzarella','🌮 Taco Gourmet']},
+    {e:'⌚',correct:1,opts:['📱 Phone Pro Max','⌚ Watch Series X','💻 Laptop Ultra','🎧 Buds Pro']},
+  ];
+  let cur=0,pts=0,streak=0,running=false,timerInt=null,timeLeft=5;
+
+  function startRound(){
+    const r=rounds[cur];
+    emojiEl.textContent=r.e;
+    emojiEl.style.transition='none';
+    emojiEl.style.transform='scale(22)';
+    blurEl.style.backdropFilter='blur(16px)';
+    timeLeft=5; tfill.style.width='100%';
+    rndEl.textContent=`Ronda ${cur+1} / ${rounds.length} · 3/3 correctas para ganar`;
+    optsEl.innerHTML=r.opts.map((o,i)=>`<button class="zoom-opt" onclick="zoomAns(${i})">${o}</button>`).join('');
+    running=true;
+    setTimeout(()=>{ emojiEl.style.transition='transform 0.3s cubic-bezier(.25,.46,.45,.94)'; },50);
+    clearInterval(timerInt);
+    timerInt=setInterval(()=>{
+      if(!running) return;
+      timeLeft-=0.08;
+      tfill.style.width=(timeLeft/5*100)+'%';
+      const zoom=Math.max(8,22-(22-8)*(1-timeLeft/5));
+      emojiEl.style.transform=`scale(${zoom.toFixed(2)})`;
+      blurEl.style.backdropFilter=`blur(${Math.max(0,(zoom-8)*1.8)}px)`;
+      if(timeLeft<=0){ clearInterval(timerInt); zoomAns(-1); }
+    },80);
+  }
+
+  window.zoomAns=function(idx){
+    if(!running) return;
+    running=false; clearInterval(timerInt);
+    const r=rounds[cur];
+    const ok=idx===r.correct;
+    emojiEl.style.transform='scale(8)'; blurEl.style.backdropFilter='blur(0)';
+    optsEl.querySelectorAll('.zoom-opt').forEach((b,i)=>{
+      b.disabled=true;
+      if(i===r.correct) b.classList.add('correct');
+      else if(i===idx) b.classList.add('wrong');
+    });
+    if(ok){
+      const bonus=Math.round(timeLeft/5*1000);
+      pts+=bonus; ptsEl.textContent=pts+' pts';
+      streak++; streakEl.textContent=streak>=2?'🔥 Racha: '+streak:'';
+      fbPill.textContent='+'+bonus+' pts ✓';
+      fbPill.style.background='rgba(0,245,160,.2)'; fbPill.style.color='var(--g)';
+    } else {
+      fbPill.textContent=idx===-1?'⏰ Tiempo':'✗ Incorrecto';
+      fbPill.style.background='rgba(255,61,110,.15)'; fbPill.style.color='var(--p2)';
+    }
+    fb.classList.add('show');
+    setTimeout(()=>{
+      fb.classList.remove('show');
+      if(!ok){ endZoom(false); return; }
+      cur++;
+      if(cur>=rounds.length) endZoom(true);
+      else startRound();
+    },1100);
+  };
+
+  function endZoom(win){
+    const msg=win
+      ? `<div style="font-size:44px">🏆</div><h3>¡GANASTE!</h3><p style="color:var(--g)">3/3 correctas · ${pts} puntos</p><div style="font-family:DM Mono,monospace;background:rgba(0,245,160,.1);border:1px solid rgba(0,245,160,.3);border-radius:8px;padding:10px 20px;font-size:18px;color:var(--g);letter-spacing:3px;margin-top:4px">ZOOM2024</div>`
+      : `<div style="font-size:44px">❌</div><h3>FALLASTE</h3><p>Necesitas acertar las 3 rondas seguidas<br>sin un solo error</p>`;
+    overlay.innerHTML=msg+(globalCredits.zoom>0?`<button class="play-btn" onclick="startZoom()">REINTENTAR (${globalCredits.zoom})</button>`:`<p style="color:var(--muted);font-size:12px">Sin intentos restantes</p>`);
+    overlay.style.display='flex';
+  }
+
+  window.startZoom=function(){
+    if(!useCredit('zoom')) return;
+    cur=0; pts=0; streak=0;
+    ptsEl.textContent='0 pts'; streakEl.textContent='';
+    overlay.style.display='none';
+    startRound();
+  };
+  startZoom();
+})();
+
+// ============================================================
+// JUEGO 4 — RULETA
+// ============================================================
+(function(){
+  const canvas=document.getElementById('ruletaCanvas');
+  const ctx=canvas.getContext('2d');
+  const resultEl=document.getElementById('ruletaResult');
+  const btn=document.getElementById('spinBtn');
+
+  // Probabilidades reales (no visuales)
+  const prizes=[
+    {label:'Producto\nGratis',color:'#6c47ff',weight:3},
+    {label:'50% OFF',color:'#ff3d6e',weight:7},
+    {label:'20% OFF',color:'#00b4d8',weight:15},
+    {label:'Envío\nGratis',color:'#00f5a0',weight:20},
+    {label:'10% OFF',color:'#ffb800',weight:25},
+    {label:'5% OFF',color:'#ff6b35',weight:30},
+  ];
+  const totalW=prizes.reduce((s,p)=>s+p.weight,0);
+  const N=prizes.length, arc=Math.PI*2/N;
+  let angle=0, spinning=false;
+  const CX=140,CY=140,R=126;
+
+  function pickWinner(){
+    let rand=Math.random()*totalW, acc=0;
+    for(let i=0;i<prizes.length;i++){ acc+=prizes[i].weight; if(rand<=acc) return i; }
+    return prizes.length-1;
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,280,280);
+    prizes.forEach((p,i)=>{
+      const s=angle+i*arc, e=s+arc;
+      ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,s,e); ctx.closePath();
+      ctx.fillStyle=p.color; ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,.35)'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.save(); ctx.translate(CX,CY); ctx.rotate(s+arc/2);
+      ctx.textAlign='right'; ctx.fillStyle='#fff';
+      ctx.font='bold 10px Bebas Neue,sans-serif';
+      p.label.split('\n').forEach((ln,li,arr)=>{ ctx.fillText(ln,R-10,(li-(arr.length-1)/2)*13); });
+      ctx.restore();
+    });
+    ctx.beginPath(); ctx.arc(CX,CY,24,0,Math.PI*2);
+    ctx.fillStyle='#07070f'; ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,.15)'; ctx.lineWidth=2; ctx.stroke();
+    ctx.font='bold 9px DM Mono,monospace'; ctx.fillStyle='rgba(255,255,255,.7)';
+    ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('MARCA',CX,CY);
+  }
+
+  window.spinRuleta=function(){
+    if(spinning) return;
+    if(!useCredit('ruleta')) return;
+    spinning=true; btn.disabled=true; resultEl.textContent='';
+    const winnerIdx=pickWinner();
+    // Calcular ángulo de aterrizaje: ganador debe quedar en la parte superior (PI*1.5)
+    const targetSector=angle%(Math.PI*2);
+    const sectorCenter=winnerIdx*arc+arc/2;
+    const needed=(Math.PI*1.5-sectorCenter+Math.PI*2*6)%(Math.PI*2);
+    const totalSpin=Math.PI*2*6+needed-targetSector;
+    const duration=4200;
+    const start=performance.now(), startA=angle;
+    function anim(ts){
+      const t=Math.min(1,(ts-start)/duration);
+      const ease=1-Math.pow(1-t,4);
+      angle=startA+totalSpin*ease;
+      draw();
+      if(t<1){ requestAnimationFrame(anim); return; }
+      spinning=false; btn.disabled=false;
+      const p=prizes[winnerIdx];
+      const isJackpot=winnerIdx===0;
+      resultEl.textContent=(isJackpot?'🏆 ':'🎉 ')+'¡Ganaste: '+p.label.replace('\n',' ')+'!';
+      resultEl.style.color=isJackpot?'#6c47ff':'#fff';
+    }
+    requestAnimationFrame(anim);
+  };
+  draw();
+})();
+
+// ============================================================
+// JUEGO 5 — ESQUIVA Y RECOGE
+// ============================================================
+(function(){
+  const canvas=document.getElementById('esquivaCanvas');
+  const overlay=document.getElementById('esquivaOverlay');
+  const scoreEl=document.getElementById('esquivaScore');
+  const livesEl=document.getElementById('esquivaLives');
+  const timerEl=document.getElementById('esquivaTimer');
+  let ctx,W,H,items=[],particles=[],basket={x:0,y:0,w:60,h:20},score=0,lives=3,timeLeft=60,running=false;
+  let raf=null,timerInt=null,spawnInt=null,combo=0,lastY=null;
+  const PRODUCTS=['🍎','🥤','🧃','🍫','🎯'];
+  const BADS=['💣','❌','🚫','☠️'];
+  const WIN=500;
+
+  function resize(){
+    const r=canvas.parentElement.getBoundingClientRect();
+    W=canvas.width=r.width; H=canvas.height=r.height;
+    basket.x=W/2; basket.y=H-40; basket.w=48;
+  }
+
+  function spawnItem(){
+    const isBad=Math.random()<0.42;
+    const speed=3.5+Math.min((60-timeLeft)/8,5);
+    items.push({
+      x:30+Math.random()*(W-60), y:-20,
+      vy:speed+Math.random()*2.5,
+      emoji:isBad?BADS[Math.floor(Math.random()*BADS.length)]:PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)],
+      bad:isBad, size:32, collected:false, alpha:1
+    });
+  }
+
+  function addParts(x,y,color){
+    for(let i=0;i<12;i++){
+      const a=Math.random()*Math.PI*2,s=2+Math.random()*5;
+      particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,r:2+Math.random()*4,alpha:1,color});
+    }
+  }
+
+  function drawBasket(){
+    const bx=basket.x,by=basket.y,bw=basket.w,bh=basket.h;
+    ctx.strokeStyle='#6c47ff'; ctx.lineWidth=3; ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.moveTo(bx-bw/2,by-bh/2);
+    ctx.lineTo(bx-bw/2,by+bh/2);
+    ctx.lineTo(bx+bw/2,by+bh/2);
+    ctx.lineTo(bx+bw/2,by-bh/2);
+    ctx.stroke();
+    ctx.fillStyle='rgba(108,71,255,.15)'; ctx.fillRect(bx-bw/2,by-bh/2,bw,bh);
+    // basket label
+    ctx.font='13px DM Mono,monospace'; ctx.fillStyle='rgba(108,71,255,.8)';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('🧺',bx,by);
+  }
+
+  function loop(){
+    if(!running) return;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#06080f'; ctx.fillRect(0,0,W,H);
+
+    // lane guides
+    for(let i=1;i<4;i++){
+      ctx.strokeStyle='rgba(255,255,255,.03)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(W/4*i,0); ctx.lineTo(W/4*i,H); ctx.stroke();
+    }
+
+    items.forEach(it=>{
+      if(!it.collected) it.y+=it.vy;
+      else{ it.y-=3; it.alpha-=0.06; }
+      ctx.globalAlpha=it.alpha;
+      ctx.font=it.size+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(it.emoji,it.x,it.y);
+      ctx.globalAlpha=1;
+
+      if(!it.collected && it.y>H+30){
+        // missed good item counts as nothing, missed bad = good
+        it.collected=true; it.alpha=0;
+      }
+      if(!it.collected && Math.abs(it.x-basket.x)<basket.w/2+10 && Math.abs(it.y-basket.y)<basket.h/2+16){
+        it.collected=true;
+        if(it.bad){
+          lives=Math.max(0,lives-1);
+          livesEl.textContent='❤️'.repeat(lives)+'🖤'.repeat(3-lives);
+          combo=0;
+          addParts(it.x,it.y,'#ff3d3d');
+          if(lives<=0){ endEsquiva(false); return; }
+        } else {
+          combo++;
+          const bonus=combo>=5?50:0;
+          score+=30+bonus; scoreEl.textContent=score;
+          addParts(it.x,it.y,'#6c47ff');
+        }
+      }
+    });
+    items=items.filter(it=>it.alpha>0&&it.y<H+60);
+
+    particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.1;p.alpha-=.05;});
+    particles=particles.filter(p=>p.alpha>0);
+    particles.forEach(p=>{ ctx.globalAlpha=p.alpha; ctx.fillStyle=p.color; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; });
+
+    drawBasket();
+    raf=requestAnimationFrame(loop);
+  }
+
+  function endEsquiva(win){
+    running=false; clearInterval(timerInt); clearInterval(spawnInt); cancelAnimationFrame(raf);
+    const msg=win
+      ? `<div style="font-size:44px">🏆</div><h3>¡GANASTE!</h3><p style="color:var(--g)">${score} pts — Premio desbloqueado</p><div style="font-family:DM Mono,monospace;background:rgba(0,245,160,.1);border:1px solid rgba(0,245,160,.3);border-radius:8px;padding:10px 20px;font-size:18px;color:var(--g);letter-spacing:3px;margin-top:4px">RECOGE2024</div>`
+      : `<div style="font-size:44px">${lives<=0?'💣':'⏰'}</div><h3>GAME OVER</h3><p>${lives<=0?'Recogiste demasiados obstáculos':'Score: '+score+' — necesitas '+WIN+' pts'}</p>`;
+    overlay.innerHTML=msg+(globalCredits.esquiva>0?`<button class="play-btn" onclick="startEsquiva()">REINTENTAR (${globalCredits.esquiva})</button>`:`<p style="color:var(--muted);font-size:12px">Sin intentos restantes</p>`);
+    overlay.style.display='flex';
+  }
+
+  window.startEsquiva=function(){
+    if(!useCredit('esquiva')) return;
+    resize(); ctx=canvas.getContext('2d');
+    items=[]; particles=[]; score=0; lives=3; timeLeft=60; running=true; combo=0;
+    scoreEl.textContent='0'; livesEl.textContent='❤️❤️❤️'; timerEl.textContent='60s';
+    overlay.style.display='none';
+    clearInterval(timerInt); clearInterval(spawnInt);
+    timerInt=setInterval(()=>{ if(!running) return; timeLeft--; timerEl.textContent=timeLeft+'s'; if(timeLeft<=0) endEsquiva(score>=WIN); },1000);
+    let sd=650;
+    spawnInt=setInterval(()=>{ if(!running) return; spawnItem(); if(sd>300) sd-=5; },sd);
+    raf=requestAnimationFrame(loop);
+  };
+
+  function moveBasket(x){
+    basket.x=Math.max(basket.w/2,Math.min(W-basket.w/2,x));
+  }
+  function getPos(e){ const r=canvas.getBoundingClientRect(); const s=e.touches?e.touches[0]:e; return{x:s.clientX-r.left,y:s.clientY-r.top}; }
+  canvas.addEventListener('mousemove',e=>{ if(!running) return; const p=getPos(e); moveBasket(p.x); });
+  canvas.addEventListener('touchmove',e=>{ e.preventDefault(); if(!running) return; const p=getPos(e); moveBasket(p.x); },{passive:false});
+  setTimeout(resize,100);
+})();
+</script>
+</body>
+</html>
