@@ -144,66 +144,96 @@ body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;font
 <div class="sep"></div>
 
 <!-- PRICING -->
-<section class="section" style="max-width:900px;">
-  <div style="text-align:center;margin-bottom:48px;">
+<section style="padding:60px 24px;max-width:600px;margin:0 auto;">
+  <div style="text-align:center;margin-bottom:40px;">
     <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Inversión</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:1px;color:var(--txt);">Planes de Servicio</h2>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:1px;color:var(--txt);line-height:1;">Planes de Servicio</h2>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
 
-    <!-- Plan 1 -->
-    <div style="background:var(--s1);border:1px solid rgba(108,71,255,.3);border-radius:16px;padding:36px;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--p),var(--p2));"></div>
-      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#a98bff;margin-bottom:16px;">Desarrollo</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;color:#fff;margin-bottom:4px;">Q4,000</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:28px;">pago único por juego</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;">
-          <span style="color:var(--p);margin-top:2px;">→</span>
-          <span>Desarrollo completo del juego a medida</span>
+  <div style="background:var(--s1);border:1px solid rgba(255,61,110,.35);border-radius:16px;overflow:hidden;">
+    <div style="height:4px;background:linear-gradient(90deg,#6c47ff,#ff3d6e);"></div>
+    <div style="padding:32px 28px;">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ff7a99;margin-bottom:14px;">Acceso + Soporte</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:4px;flex-wrap:wrap;">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:72px;line-height:1;color:#fff;">Q800</span>
+        <span style="font-size:13px;color:var(--muted);padding-bottom:14px;">por pantalla · por día de activación</span>
+      </div>
+      <div style="height:1px;background:rgba(255,255,255,.06);margin:20px 0;"></div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="color:#6c47ff;font-size:16px;line-height:1.4;flex-shrink:0;">→</span>
+          <span style="font-size:14px;line-height:1.5;">Desarrollo y brandeo del juego incluido</span>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;">
-          <span style="color:var(--p);margin-top:2px;">→</span>
-          <span>Brandeo con logo, colores y assets de la marca</span>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="color:#6c47ff;font-size:16px;line-height:1.4;flex-shrink:0;">→</span>
+          <span style="font-size:14px;line-height:1.5;">Acceso al juego el día del evento</span>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;">
-          <span style="color:var(--p);margin-top:2px;">→</span>
-          <span>Instalación y configuración en la pantalla</span>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="color:#6c47ff;font-size:16px;line-height:1.4;flex-shrink:0;">→</span>
+          <span style="font-size:14px;line-height:1.5;">Soporte técnico durante toda la activación</span>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;">
-          <span style="color:var(--p);margin-top:2px;">→</span>
-          <span>Pruebas y ajustes antes del evento</span>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="color:#6c47ff;font-size:16px;line-height:1.4;flex-shrink:0;">→</span>
+          <span style="font-size:14px;line-height:1.5;">Actualización de contenido por campaña</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="color:#6c47ff;font-size:16px;line-height:1.4;flex-shrink:0;">→</span>
+          <span style="font-size:14px;line-height:1.5;">Reporte de jugadores y engagement post-evento</span>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Plan 2 -->
-    <div style="background:var(--s1);border:1px solid rgba(255,61,110,.3);border-radius:16px;padding:36px;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--p2),#ff8c00);"></div>
-      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ff7a99;margin-bottom:16px;">Por Activación</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;color:#fff;margin-bottom:4px;">Q2,000</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:28px;">por evento / día de activación</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;">
-          <span style="color:var(--p2);margin-top:2px;">→</span>
-          <span>Acceso al juego el día del evento</span>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;">
-          <span style="color:var(--p2);margin-top:2px;">→</span>
-          <span>Soporte técnico durante toda la activación</span>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;">
-          <span style="color:var(--p2);margin-top:2px;">→</span>
-          <span>Actualización de contenido por campaña</span>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;">
-          <span style="color:var(--p2);margin-top:2px;">→</span>
-          <span>Reporte de jugadores y engagement post-evento</span>
-        </div>
+  <!-- Ejemplos -->
+  <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px;">
+
+    <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Ejemplos de cobro</div>
+
+    <!-- Ejemplo 1 -->
+    <div style="background:var(--s1);border:1px solid var(--b);border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--txt);margin-bottom:4px;">1 activación · 1 pantalla</div>
+        <div style="font-size:12px;color:var(--muted);">Q800 × 1 pantalla × 1 evento</div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#6c47ff;white-space:nowrap;">Q800</div>
+    </div>
+
+    <!-- Ejemplo 2 -->
+    <div style="background:var(--s1);border:1px solid var(--b);border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--txt);margin-bottom:4px;">1 activación · 2 pantallas</div>
+        <div style="font-size:12px;color:var(--muted);">Q800 × 2 pantallas × 1 evento</div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#6c47ff;white-space:nowrap;">Q1,600</div>
+    </div>
+
+    <!-- Ejemplo 3 -->
+    <div style="background:var(--s1);border:1px solid rgba(108,71,255,.25);border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--txt);margin-bottom:4px;">4 activaciones al mes · 1 pantalla cada una</div>
+        <div style="font-size:12px;color:var(--muted);">Q800 × 1 pantalla × 4 eventos</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#a98bff;white-space:nowrap;">Q3,200</div>
+        <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">al mes</div>
+      </div>
+    </div>
+
+    <!-- Ejemplo 4 -->
+    <div style="background:var(--s1);border:1px solid rgba(108,71,255,.35);border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#6c47ff,#ff3d6e);"></div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--txt);margin-bottom:4px;">4 activaciones al mes · 2 pantallas cada una</div>
+        <div style="font-size:12px;color:var(--muted);">Q800 × 2 pantallas × 4 eventos</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#ff3d6e;white-space:nowrap;">Q6,400</div>
+        <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">al mes</div>
       </div>
     </div>
 
   </div>
+
 </section>
 
 <div class="sep"></div>
@@ -552,7 +582,73 @@ body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;font
   </div>
 </section>
 
+<div class="sep"></div>
 
+<!-- ========== JUEGO 6: MEMORIA ========== -->
+<section class="section">
+  <div class="game-header">
+    <span class="game-num">06</span>
+    <div class="badge-row">
+      <span class="badge brand">Brandeabilidad 10/10</span>
+      <span class="badge diff">Dificultad: Memoria + Velocidad</span>
+    </div>
+    <h2>Memoria</h2>
+    <p>8 pares de cartas con productos de la marca. El usuario debe encontrar todos los pares antes de que se acabe el tiempo. Cada error penaliza puntos y el reloj no para.</p>
+    <div class="tags">
+      <span class="tag">1–2 jugadores</span><span class="tag">60 seg</span>
+      <span class="tag">16 cartas</span><span class="tag">muy fácil de brandear</span>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="game-frame">
+      <div class="game-viewport" id="memoriaVP" style="background:#07070f;">
+        <canvas id="memoriaCanvas"></canvas>
+        <div class="ninja-hud">
+          <div class="ninja-score" id="memoriaScore">0</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+            <div class="ninja-timer" id="memoriaTimer">60s</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);" id="memoriaPairs">0/8 pares</div>
+          </div>
+        </div>
+        <div class="overlay" id="memoriaOverlay">
+          <div style="font-size:52px;">🃏</div>
+          <h3>Memoria</h3>
+          <p>Encuentra los 8 pares de cartas antes de que se acabe el tiempo. Cada error resta 10 pts. ¡Memoriza las posiciones!</p>
+          <button class="play-btn" onclick="startMemoria()">JUGAR</button>
+        </div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card diff-block">
+        <h4>¿Por qué es difícil?</h4>
+        <ul>
+          <li>60 segundos para encontrar 8 pares — el tiempo aprieta</li>
+          <li>Cada error resta 10 pts y revela la carta solo un momento</li>
+          <li>16 cartas en pantalla — difícil memorizar todas las posiciones</li>
+          <li>La presión del reloj provoca clicks apresurados y más errores</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Sistema de puntos</h4>
+        <ul>
+          <li>Par encontrado: +100 pts</li>
+          <li>Error (no coinciden): -10 pts</li>
+          <li>Completar todos los pares: premio desbloqueado</li>
+          <li>Bonus por tiempo restante al completar</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Assets de marca</h4>
+        <ul>
+          <li>Imágenes de productos o íconos de campaña en las cartas</li>
+          <li>Reverso de cartas con logo o patrón de marca</li>
+          <li>Colores corporativos en bordes y fondo</li>
+          <li>Pantalla de victoria con CTA de la marca</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
 <script>
 // ============================================================
@@ -1113,6 +1209,137 @@ function useCredit(game) {
   function getPos(e){ const r=canvas.getBoundingClientRect(); const s=e.touches?e.touches[0]:e; return{x:s.clientX-r.left,y:s.clientY-r.top}; }
   canvas.addEventListener('mousemove',e=>{ if(!running) return; const p=getPos(e); moveBasket(p.x); });
   canvas.addEventListener('touchmove',e=>{ e.preventDefault(); if(!running) return; const p=getPos(e); moveBasket(p.x); },{passive:false});
+  setTimeout(resize,100);
+})();
+
+// ============================================================
+// JUEGO 6 — MEMORIA
+// ============================================================
+(function(){
+  const canvas=document.getElementById('memoriaCanvas');
+  const overlay=document.getElementById('memoriaOverlay');
+  const scoreEl=document.getElementById('memoriaScore');
+  const timerEl=document.getElementById('memoriaTimer');
+  const pairsEl=document.getElementById('memoriaPairs');
+  let ctx,W,H,cards=[],flipped=[],matched=[],running=false,locked=false;
+  let score=0,timeLeft=60,timerInt=null,raf=null,moves=0;
+  const EMOJIS=['🍎','🥤','🧃','🍫','🎯','⚽','⭐','🎪'];
+  const COLS=4, ROWS=4, TOTAL=16;
+
+  function resize(){ const r=canvas.parentElement.getBoundingClientRect(); W=canvas.width=r.width; H=canvas.height=r.height; }
+
+  function buildDeck(){
+    const deck=[...EMOJIS,...EMOJIS].sort(()=>Math.random()-.5);
+    const padX=16, padY=70;
+    const cw=(W-padX*2)/COLS, ch=(H-padY*2)/ROWS;
+    cards=deck.map((e,i)=>({
+      emoji:e, col:i%COLS, row:Math.floor(i/COLS),
+      x:padX+((i%COLS)+.5)*cw, y:padY+(Math.floor(i/COLS)+.5)*ch,
+      w:cw-8, h:ch-8,
+      revealed:false, matched:false, flip:0, flipDir:1
+    }));
+  }
+
+  function drawCard(c){
+    const hw=c.w/2*Math.abs(Math.cos(c.flip*Math.PI));
+    const x=c.x, y=c.y, hh=c.h/2;
+    const isBack=c.flip<0.5;
+    const col=c.matched?'#00f5a0':isBack?'#1e1e3a':'#2a1a4a';
+    const border=c.matched?'#00f5a0':isBack?'#3a3a6a':'#6c47ff';
+    // card body
+    ctx.save();
+    ctx.beginPath();
+    ctx.roundRect(x-hw, y-hh, hw*2, hh*2, 8);
+    ctx.fillStyle=col; ctx.fill();
+    ctx.strokeStyle=border; ctx.lineWidth=c.matched?2:1.5; ctx.stroke();
+    ctx.restore();
+    if(!isBack || c.matched){
+      ctx.font=Math.min(c.w,c.h)*.42+'px serif';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.globalAlpha=Math.abs(Math.cos(c.flip*Math.PI));
+      ctx.fillText(c.emoji,x,y);
+      ctx.globalAlpha=1;
+    } else {
+      // back pattern
+      ctx.font='16px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.globalAlpha=.25;
+      ctx.fillText('❓',x,y);
+      ctx.globalAlpha=1;
+    }
+  }
+
+  function loop(){
+    if(!running) return;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#07070f'; ctx.fillRect(0,0,W,H);
+    // animate flips
+    cards.forEach(c=>{
+      if(c.revealed||c.matched){ if(c.flip<1){ c.flip=Math.min(1,c.flip+.12); } }
+      else { if(c.flip>0){ c.flip=Math.max(0,c.flip-.12); } }
+      drawCard(c);
+    });
+    raf=requestAnimationFrame(loop);
+  }
+
+  function checkMatch(){
+    if(flipped.length<2) return;
+    locked=true;
+    const [a,b]=flipped;
+    moves++;
+    if(a.emoji===b.emoji){
+      setTimeout(()=>{
+        a.matched=b.matched=true;
+        matched.push(a,b);
+        score+=100; scoreEl.textContent=score;
+        pairsEl.textContent=(matched.length/2)+'/'+EMOJIS.length+' pares';
+        flipped=[];locked=false;
+        if(matched.length===TOTAL) endMemoria(true);
+      },400);
+    } else {
+      setTimeout(()=>{
+        a.revealed=b.revealed=false;
+        flipped=[];locked=false;
+        score=Math.max(0,score-10); scoreEl.textContent=score;
+      },900);
+    }
+  }
+
+  function tap(x,y){
+    if(!running||locked) return;
+    const c=cards.find(c=>!c.matched&&!c.revealed&&Math.abs(c.x-x)<c.w/2&&Math.abs(c.y-y)<c.h/2);
+    if(!c||flipped.includes(c)) return;
+    c.revealed=true;
+    flipped.push(c);
+    if(flipped.length===2) checkMatch();
+  }
+
+  function endMemoria(win){
+    running=false; clearInterval(timerInt); cancelAnimationFrame(raf);
+    const msg=win
+      ? `<div style="font-size:44px">🏆</div><h3>¡GANASTE!</h3><p style="color:var(--g)">${score} pts · ${moves} movimientos</p><div style="font-family:'DM Mono',monospace;background:rgba(0,245,160,.1);border:1px solid rgba(0,245,160,.3);border-radius:8px;padding:10px 20px;font-size:18px;color:var(--g);letter-spacing:3px;margin-top:4px">MEMORIA2024</div>`
+      : `<div style="font-size:44px">⏰</div><h3>TIEMPO</h3><p>${matched.length/2} de ${EMOJIS.length} pares encontrados<br>${score} puntos</p>`;
+    overlay.innerHTML=msg+`<button class="play-btn" onclick="startMemoria()">JUGAR DE NUEVO</button>`;
+    overlay.style.display='flex';
+  }
+
+  window.startMemoria=function(){
+    resize(); ctx=canvas.getContext('2d');
+    matched=[]; flipped=[]; score=0; timeLeft=60; running=true; locked=false; moves=0;
+    scoreEl.textContent='0'; timerEl.textContent='60s'; pairsEl.textContent='0/'+EMOJIS.length+' pares';
+    overlay.style.display='none';
+    buildDeck();
+    clearInterval(timerInt);
+    timerInt=setInterval(()=>{
+      if(!running) return;
+      timeLeft--; timerEl.textContent=timeLeft+'s';
+      if(timeLeft<=0) endMemoria(false);
+    },1000);
+    raf=requestAnimationFrame(loop);
+  };
+
+  function getPos(e){ const r=canvas.getBoundingClientRect(); const s=e.touches?e.touches[0]:e; return{x:s.clientX-r.left,y:s.clientY-r.top}; }
+  canvas.addEventListener('click',e=>{const p=getPos(e);tap(p.x,p.y);});
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();const p=getPos(e);tap(p.x,p.y);},{passive:false});
   setTimeout(resize,100);
 })();
 </script>
